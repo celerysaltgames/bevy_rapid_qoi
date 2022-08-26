@@ -1,9 +1,11 @@
 use anyhow::anyhow;
 use bevy::{
-    asset::{AssetLoader, LoadedAsset},
     prelude::*,
+    asset::{AssetLoader, LoadedAsset, Error},
     render::render_resource::{Extent3d, TextureDimension, TextureFormat},
 };
+use rapid_qoi::{Colors, Qoi};
+
 
 struct QOIAssetLoader;
 
@@ -12,27 +14,28 @@ impl AssetLoader for QOIAssetLoader {
         &'a self,
         bytes: &'a [u8],
         load_context: &'a mut bevy::asset::LoadContext,
-    ) -> bevy::utils::BoxedFuture<'a, Result<(), bevy::asset::Error>> {
+    ) -> bevy::utils::BoxedFuture<'a, Result<(), Error>> {
+
         Box::pin(async move {
-            let (header, decoded) = qoi::decode_to_vec(&bytes)?;
+            let (header, decoded) = Qoi::decode_alloc(&bytes).unwrap();
 
-            load_context.set_default_asset(LoadedAsset::new(Image::new(
-                Extent3d {
-                    width: header.width,
-                    height: header.height,
-                    ..Default::default()
-                },
-                TextureDimension::D2,
-                decoded,
-                match header.channels {
-                    qoi::Channels::Rgb => Err(anyhow!("Rgb not supported.")),
-                    qoi::Channels::Rgba => Ok(match header.colorspace {
-                        qoi::ColorSpace::Srgb => TextureFormat::Rgba8UnormSrgb,
-                        qoi::ColorSpace::Linear => TextureFormat::Rgba8Unorm,
-                    }),
-                }?,
-            )));
-
+            load_context.set_default_asset(
+                LoadedAsset::new(Image::new(
+                    Extent3d {
+                        width: header.width,
+                        height: header.height,
+                        ..Default::default()
+                    },
+                    TextureDimension::D2,
+                    decoded,
+                    match header.colors {
+                        Colors::Rgb => Err(anyhow!("Rgb not supported.")),
+                        Colors::Srgb => Err(anyhow!("Rgb not supported.")),
+                        Colors::Rgba => Ok(TextureFormat::Rgba8Unorm),
+                        Colors::SrgbLinA => Ok(TextureFormat::Rgba8UnormSrgb),
+                    }?
+                ))
+            );
             Ok(())
         })
     }
@@ -42,7 +45,7 @@ impl AssetLoader for QOIAssetLoader {
     }
 }
 
-/// Plugin that registers the QOIAssetLoader.
+/// Plugin that registers the QOIAssetLoader
 pub struct QOIPlugin;
 
 impl Plugin for QOIPlugin {

@@ -1,6 +1,6 @@
 [package]
 name = "bevy_rapid_qoi"
-version = "0.1.0"
+version = "1.0.0"
 edition = "2021"
 license = "MIT"
 description = "Bevy support for the QOI (Quite OK Image) format, based on rapid_qoi"
@@ -10,8 +10,8 @@ readme = "README.md"
 exclude = ["assets/*", "examples/*"]
 
 [dependencies]
-bevy = { version = "~0.8", default-features = false, features = ["bevy_asset",  "bevy_render"] }
-qoi = "0.4"
+bevy = { version = "~0.8", default-features = false, features = ["bevy_asset", "bevy_render"] }
+rapid-qoi = "0.6.1"
 anyhow = "1.0"
 
 [dev-dependencies]
