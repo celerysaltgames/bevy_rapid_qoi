@@ -1,19 +1,16 @@
 [package]
-name = "bevy_qoi"
+name = "bevy_rapid_qoi"
 version = "0.1.0"
 edition = "2021"
 license = "MIT"
-description = "Bevy support for the QOI (Quite OK Image) format."
-homepage = "https://github.com/digitaljokerman/bevy_qoi"
-repository = "https://github.com/digitaljokerman/bevy_qoi"
+description = "Bevy support for the QOI (Quite OK Image) format, based on rapid_qoi"
+homepage = "https://github.com/celerysaltgames/bevy_rapid_qoi"
+repository = "https://github.com/celerysaltgames/bevy_rapid_qoi"
 readme = "README.md"
 exclude = ["assets/*", "examples/*"]
 
 [dependencies]
-bevy = { version = "~0.8", default-features = false, features = [
-    "bevy_asset",
-    "bevy_render",
-] }
+bevy = { version = "~0.8", default-features = false, features = ["bevy_asset",  "bevy_render"] }
 qoi = "0.4"
 anyhow = "1.0"
 
