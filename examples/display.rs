@@ -1,5 +1,5 @@
 use bevy::prelude::*;
-use bevy_qoi::QOIPlugin;
+use bevy_rapid_qoi::QOIPlugin;
 
 fn main() {
     App::new()
