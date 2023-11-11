@@ -34,7 +34,8 @@ impl AssetLoader for QOIAssetLoader {
             let (header, decoded) = Qoi::decode_alloc(&bytes)?;
             let format = match header.colors {
                 Colors::Rgb | Colors::Srgb => Err(QOILoadError::NoAlpha(header.colors)),
-                Colors::Rgba | Colors::SrgbLinA => Ok(TextureFormat::Rgba8UnormSrgb),
+                Colors::Rgba => Ok(TextureFormat::Rgba8Unorm),
+                Colors::SrgbLinA => Ok(TextureFormat::Rgba8UnormSrgb),
             }?;
             let image = Image::new(
                 Extent3d {
