@@ -10,9 +10,11 @@ readme = "README.md"
 exclude = ["assets/*", "examples/*"]
 
 [dependencies]
-bevy = { version = "~0.8", default-features = false, features = ["bevy_asset", "bevy_render"] }
 rapid-qoi = "0.6.1"
-anyhow = "1.0"
+
+[dependencies.bevy]
+version = "~0.12"
+features = ["bevy_asset", "bevy_sprite"]
 
 [dev-dependencies]
-bevy = { version = "~0.8", default-features = true }
+bevy = { version = "~0.12", default-features = true }
